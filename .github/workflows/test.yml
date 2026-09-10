@@ -12,17 +12,39 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
       - name: Install uv
         uses: astral-sh/setup-uv@v6
-
-      - name: Set up Python
-        run: uv python install 3.12
 
       - name: Install dependencies
         run: uv sync --dev
 
+      - name: Install pytest-cov
+        run: uv pip install pytest-cov
+
       - name: Run tests
         run: uv run pytest -v
 
-      - name: Run coverage
-        run: uv run pytest --cov=app --cov-report=term-missing
+      - name: Generate coverage report
+        run: |
+          uv run pytest \
+            --cov=app \
+            --cov-report=term-missing \
+            --cov-report=html \
+            --cov-report=xml
+
+      - name: Upload HTML coverage report
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: htmlcov/
+
+      - name: Upload coverage XML
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-xml
+          path: coverage.xml
