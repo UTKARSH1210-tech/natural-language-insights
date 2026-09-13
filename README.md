@@ -7,6 +7,7 @@ The system dynamically profiles the uploaded dataset, stores it in DuckDB, trans
 The design intentionally keeps the LLM out of SQL generation and numerical calculation to improve correctness, safety, and reproducibility.
 
 ---
+![Natural Language Insights engine](nlp.gif)
 
 ## 1. Overview
 
